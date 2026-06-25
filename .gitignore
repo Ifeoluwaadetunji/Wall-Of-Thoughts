@@ -1,0 +1,26 @@
+# Dependency directories
+node_modules/
+.npm/
+
+# Vercel
+.vercel/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment (never commit secrets)
+.env
+.env.local
+.env.production

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wall of Thoughts — Drop a thought, anonymously</title>
+  <meta name="description" content="An anonymous infinite canvas where anyone can drop their thoughts, browse freely, and search through the collective mind.">
+  <meta property="og:title" content="Wall of Thoughts">
+  <meta property="og:description" content="An anonymous space for raw, honest thoughts.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Starfield background -->
+  <canvas id="starfield"></canvas>
+
+  <!-- Ambient glow orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- ===== SEARCH BAR ===== -->
+  <div class="search-container" id="searchContainer">
+    <div class="search-inner">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7.5"></circle>
+        <line x1="20" y1="20" x2="15.8" y2="15.8"></line>
+      </svg>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search the wall..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search thoughts"
+      >
+      <div class="search-results-group" id="searchResultsGroup">
+        <span class="search-count" id="searchCount"></span>
+        <button class="search-nav-btn" id="searchPrev" title="Previous match (Shift+Enter)">↑</button>
+        <button class="search-nav-btn" id="searchNext" title="Next match (Enter)">↓</button>
+        <button class="search-clear-btn" id="searchClear" title="Clear search">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INFINITE CANVAS ===== -->
+  <div id="canvasWrapper" role="application" aria-label="Infinite thought canvas">
+    <div id="infiniteCanvas">
+      <!-- Thought cards injected here by JS -->
+    </div>
+  </div>
+
+  <!-- ===== EMPTY STATE ===== -->
+  <div class="empty-state" id="emptyState">
+    <div class="empty-glyph">✦</div>
+    <h1 class="empty-title">The wall is blank.</h1>
+    <p class="empty-sub">Be the first to leave a mark.</p>
+  </div>
+
+  <!-- ===== CONTROLS ===== -->
+  <div class="controls-cluster" role="toolbar" aria-label="Canvas controls">
+    <button class="ctrl-btn" id="resetViewBtn" title="Reset view (R)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+        <path d="M3 3v5h5"/>
+      </svg>
+    </button>
+    <button class="ctrl-btn" id="zoomInBtn" title="Zoom in (+)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+    <button class="ctrl-btn" id="zoomOutBtn" title="Zoom out (-)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ===== STATS PILL ===== -->
+  <div class="stats-pill" id="statsPill" aria-live="polite">
+    <span class="live-dot"></span>
+    <span id="thoughtCount">0</span>&nbsp;thoughts on the wall
+  </div>
+
+  <!-- ===== THOUGHT DOCK (collapsible input) ===== -->
+  <div class="thought-dock" id="thoughtDock">
+
+    <!-- Expanded panel (shown first in DOM so it stacks above bubble) -->
+    <div class="thought-panel" id="thoughtPanel" role="dialog" aria-label="New thought">
+      <div class="panel-header">
+        <div class="panel-title">
+          <span class="panel-sparkle">✦</span>
+          Drop a thought
+        </div>
+        <button class="panel-close-btn" id="panelCloseBtn" title="Close (Esc)" aria-label="Close panel">✕</button>
+      </div>
+      <textarea
+        id="thoughtTextarea"
+        placeholder="What's on your mind? Anonymous. Unjudged. Real."
+        maxlength="280"
+        aria-label="Your thought"
+      ></textarea>
+      <div class="panel-footer">
+        <span class="char-count" id="charCount">0 / 280</span>
+        <div class="panel-hint">Ctrl+Enter to drop</div>
+        <button class="drop-btn" id="dropBtn" aria-label="Submit thought">
+          Drop it
+          <span class="drop-sparkle">✦</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsed bubble -->
+    <button class="chat-bubble" id="chatBubble" title="Share a thought (N)" aria-label="Open thought input">
+      <span class="bubble-glyph">💭</span>
+      <span class="bubble-label">Think out loud</span>
+    </button>
+
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Firebase SDKs (compat / CDN — no bundler needed) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>
